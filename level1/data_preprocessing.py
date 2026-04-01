@@ -15,13 +15,15 @@ print("Original Data:\n", df.head()) # Display the first few rows of the dataset
 # Check for missing values
 print("\nMissing Values:\n", df.isnull().sum())
 
-# Fill numerical missing values with the mean
-for col in df.select_dtypes(include=[np.number]).columns:
-    df[col].fillna(df[col].mean(), inplace=True)
-    
-# Fill categorical missing values with the mode
-for col in df.select_dtypes(include=[object]).columns:
-    df[col].fillna(df[col].mode()[0], inplace=True)
+# Handle missing values (clean version)
+
+# Numerical columns
+for col in df.select_dtypes(include=np.number).columns:
+    df[col] = df[col].fillna(df[col].mean())
+
+# Categorical columns
+for col in df.select_dtypes(include='object').columns:
+    df[col] = df[col].fillna(df[col].mode()[0])    
     
 # Encode Categorical Variables
 label_encoders = {}
